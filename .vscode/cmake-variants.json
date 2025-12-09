@@ -1,0 +1,23 @@
+{
+    "stm32Target": {
+        "default": "f103cbt6",
+        "choices": {
+            "f103c8t6": {
+                "short": "STM32F103C8T6",
+                "long": "STM32F103C8T6 (64KB Flash, 20KB RAM)",
+                "buildType": "Debug",
+                "settings": {
+                    "STM32_TARGET": "F103C8T6"
+                }
+            },
+            "f103cbt6": {
+                "short": "STM32F103CBT6", 
+                "long": "STM32F103CBT6 (128KB Flash, 20KB RAM)",
+                "buildType": "Debug",
+                "settings": {
+                    "STM32_TARGET": "F103CBT6"
+                }
+            }
+        }
+    }
+}

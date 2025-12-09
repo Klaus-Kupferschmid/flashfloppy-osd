@@ -1,0 +1,69 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug STM32F103C8T6",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/src/FF_OSD.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "stlink",
+            "device": "STM32F103C8",
+            "interface": "swd",
+            "serialNumber": "",
+            "svdFile": "${workspaceFolder}/.vscode/STM32F103xx.svd",
+            "preLaunchTask": "Build Complete (PowerShell)",
+            "armToolchainPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344\\tools\\bin",
+            "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin\\ST-LINK_gdbserver.exe",
+            "showDevDebugOutput": "raw",
+            "swoConfig": {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 2000000,
+                "source": "probe",
+                "decoders": [
+                    {
+                        "label": "ITM Port 0",
+                        "type": "console",
+                        "port": 0,
+                        "showOnStartup": true,
+                        "logToFile": false
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Debug STM32F103CBT6",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/src/FF_OSD.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "stlink",
+            "device": "STM32F103CB",
+            "interface": "swd",
+            "serialNumber": "",
+            "svdFile": "${workspaceFolder}/.vscode/STM32F103xx.svd",
+            "preLaunchTask": "Build Complete (PowerShell)",
+            "armToolchainPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344\\tools\\bin",
+            "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin\\ST-LINK_gdbserver.exe",
+            "showDevDebugOutput": "raw",
+            "swoConfig": {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 2000000,
+                "source": "probe",
+                "decoders": [
+                    {
+                        "label": "ITM Port 0",
+                        "type": "console",
+                        "port": 0,
+                        "showOnStartup": true,
+                        "logToFile": false
+                    }
+                ]
+            }
+        }
+    ]
+}

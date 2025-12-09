@@ -712,8 +712,11 @@ static void emulate_gotek_buttons(void)
     emulate_gotek_button(K_RIGHT, &gr);
     emulate_gotek_button(K_SELECT, &gs);
     if (gl.pressed) b |= B_LEFT;
+    if (!gpio_read_pin(gpioa, 6)) b |= B_LEFT;
     if (gr.pressed) b |= B_RIGHT;
+    if (!gpio_read_pin(gpiob, 0)) b |= B_RIGHT;
     if (gs.pressed) b |= B_SELECT;
+    if (!gpio_read_pin(gpioa, 2)) b |= B_SELECT;
     *(volatile uint8_t *)&i2c_osd_info.buttons = b;
 }
 

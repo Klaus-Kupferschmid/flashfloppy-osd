@@ -9,3 +9,12 @@
 *.rej
 *.swp
 /FF_OSD*
+
+# CMake build artifacts
+build_*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Additional VS Code files (optional)
+# .vscode/settings.json

@@ -1,0 +1,171 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake Configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S", ".",
+                "-B", "build",
+                "-G", "Ninja"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Original (Make)",
+            "type": "shell",
+            "command": "C:\\Users\\KlausKupferschmid\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin\\make.exe",
+            "args": ["all"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build Complete (PowerShell)",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-ExecutionPolicy", "Bypass",
+                "-File", "build-windows.ps1"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }, 
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build via CMake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build",
+                "--target", "build_original"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": "CMake Configure"
+        },
+        {
+            "label": "Clean All",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build",
+                "--target", "clean_original"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "dependsOn": "CMake Configure"
+        },
+        {
+            "label": "Clean Manual",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Get-ChildItem -Name -Filter 'FF_OSD-v1.9*' | ForEach-Object { Remove-Item $_ -Recurse -Force -ErrorAction SilentlyContinue }; Get-ChildItem -Recurse -Filter '*.o' | Remove-Item -Force -ErrorAction SilentlyContinue; Get-ChildItem -Recurse -Filter '*.d' | Remove-Item -Force -ErrorAction SilentlyContinue; Get-ChildItem -Path src -Filter '*.elf' | Remove-Item -Force -ErrorAction SilentlyContinue; Get-ChildItem -Path src -Filter '*.bin' | Remove-Item -Force -ErrorAction SilentlyContinue; Get-ChildItem -Path src -Filter '*.hex' | Remove-Item -Force -ErrorAction SilentlyContinue; Get-ChildItem -Path src -Filter '*.ld' -Exclude '*.ld.S' | Remove-Item -Force -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force build -ErrorAction SilentlyContinue"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Flash STM32 via ST-Link",
+            "type": "shell",
+            "command": "C:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "src\\FF_OSD.hex",
+                "-v", "-g"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "dependsOn": "Build Original (Make)"
+        },
+        {
+            "label": "Flash via CMake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build",
+                "--target", "flash_stlink"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "dependsOn": "CMake Configure"
+        },
+        {
+            "label": "Project Info",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build",
+                "--target", "info"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "dependsOn": "CMake Configure"
+        }
+    ]
+}

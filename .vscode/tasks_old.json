@@ -1,0 +1,224 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake Configure F103C8T6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build_f103c8t6",
+                "-DSTM32_TARGET=F103C8T6",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "."
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Configure CMake for STM32F103C8T6 (64KB Flash)"
+        },
+        {
+            "label": "CMake Configure F103CBT6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build_f103cbt6",
+                "-DSTM32_TARGET=F103CBT6",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "."
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Configure CMake for STM32F103CBT6 (128KB Flash)"
+        },
+        {
+            "label": "Build F103C8T6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build_f103c8t6"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOn": "CMake Configure F103C8T6",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build firmware for STM32F103C8T6"
+        },
+        {
+            "label": "Build F103CBT6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build_f103cbt6"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "CMake Configure F103CBT6",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build firmware for STM32F103CBT6 (default target)"
+        },
+        {
+            "label": "Build Release F103C8T6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build_f103c8t6_release",
+                "-DSTM32_TARGET=F103C8T6",
+                "-DCMAKE_BUILD_TYPE=Release",
+                ".",
+                "&&",
+                "cmake",
+                "--build", "build_f103c8t6_release"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build release firmware for STM32F103C8T6"
+        },
+        {
+            "label": "Build Release F103CBT6",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build_f103cbt6_release",
+                "-DSTM32_TARGET=F103CBT6",
+                "-DCMAKE_BUILD_TYPE=Release",
+                ".",
+                "&&",
+                "cmake",
+                "--build", "build_f103cbt6_release"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build release firmware for STM32F103CBT6"
+        },
+        {
+            "label": "Flash F103C8T6",
+            "type": "shell",
+            "command": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.2.100.202412061334\\tools\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "build_f103c8t6/FF_OSD-v1.9-F103C8T6.bin", "0x08000000",
+                "-v",
+                "-rst"
+            ],
+            "group": "test",
+            "dependsOn": "Build F103C8T6",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "Flash firmware to STM32F103C8T6 via ST-Link"
+        },
+        {
+            "label": "Flash F103CBT6",
+            "type": "shell",
+            "command": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.2.100.202412061334\\tools\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "build_f103cbt6/FF_OSD-v1.9-F103CBT6.bin", "0x08000000",
+                "-v",
+                "-rst"
+            ],
+            "group": "test",
+            "dependsOn": "Build F103CBT6",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "Flash firmware to STM32F103CBT6 via ST-Link"
+        },
+        {
+            "label": "Clean All",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Remove-Item -Recurse -Force build_* -ErrorAction SilentlyContinue"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "Clean all build directories"
+        },
+        {
+            "label": "ST-Link Info",
+            "type": "shell",
+            "command": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.2.100.202412061334\\tools\\bin\\STM32_Programmer_CLI.exe",
+            "args": ["-l"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "Show connected ST-Link debugger information"
+        }
+    ]
+}
