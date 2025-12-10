@@ -166,6 +166,49 @@
             },
             "problemMatcher": [],
             "dependsOn": "CMake Configure"
+        },
+        {
+            "label": "Build Debug (Make)",
+            "type": "shell",
+            "command": "C:\\Users\\KlausKupferschmid\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin\\make.exe",
+            "args": ["all", "debug=y"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Flash Debug STM32 via ST-Link",
+            "type": "shell",
+            "command": "C:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin\\STM32_Programmer_CLI.exe",
+            "args": [
+                "-c", "port=SWD",
+                "-w", "src\\FF_OSD.hex",
+                "-v", "-g"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "dependsOn": "Build Debug (Make)"
+        },
+        {
+            "label": "Build and Flash Debug",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build Debug (Make)",
+                "Flash Debug STM32 via ST-Link"
+            ]
         }
     ]
 }
