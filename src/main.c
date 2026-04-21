@@ -130,6 +130,9 @@ static uint16_t startup_dispctl_mode;
 uint16_t running_display_timing;
 uint16_t running_polarity, detected_polarity;
 
+/* Debug: last button pressed (1=DOWN, 2=UP, 4=SELECT, 0=none) */
+volatile uint8_t debug_btn; /*KKu*/
+
 /* Guard the stacks with known values. */
 static void canary_init(void)
 {
@@ -145,6 +148,9 @@ static void canary_check(void)
 
 static void watchdog_init(void)
 {
+    /* Freeze IWDG when debugger halts the core */
+    *(volatile uint32_t *)0xE0042004 |= (1u << 8); /* DBGMCU_CR.DBG_IWDG_STOP */
+
     /* Set up the Watchdog. Based on LSI at 30-60kHz (av. 40kHz). */
     iwdg->kr = 0xcccc; /* Enables watchdog, turns on LSI oscillator. */
     while (iwdg->sr & 3) {
@@ -1016,29 +1022,6 @@ int main(void)
         watchdog_kick();
 
         canary_check();
-        /* Debug button with debouncing */
-        {
-            static int loisel = 0;
-            static int button_state = 1; /* Previous state (1 = not pressed) */
-            static int debounce_counter = 0;
-            volatile int debug_button_pressed;
-            int current_button = gpio_read_pin(gpioa, 6);
-            
-            if (current_button != button_state) {
-                debounce_counter++;
-                if (debounce_counter > 1000) { /* Debounce threshold */
-                    button_state = current_button;
-                    debounce_counter = 0;
-                    if (button_state == 0) { /* Button pressed (LOW) */
-                        loisel++;
-                        debug_button_pressed = loisel; /* Debug breakpoint hier */
-                        (void)debug_button_pressed; /* Suppress unused variable warning */
-                    }
-                }
-            } else {
-                debounce_counter = 0;
-            }
-        }; /*FrontPanel Button KKu*/
         /* Wait while displaying OSD box. This avoids modifying config values 
          * etc during the critical display period, which could cause
          * glitches. */
@@ -1183,6 +1166,12 @@ int main(void)
         }
 
         i2c_process();
+
+        /* Update debug button state continuously (read via Live Watch) */
+        debug_btn = 0;
+        if (!gpio_read_pin(gpioa, 6)) debug_btn = 1; /* DOWN */
+        if (!gpio_read_pin(gpiob, 0)) debug_btn = 2; /* UP */
+        if (!gpio_read_pin(gpioa, 2)) debug_btn = 4; /* SELECT */
     }
 
     return 0;

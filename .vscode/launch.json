@@ -47,7 +47,7 @@
             "svdFile": "${workspaceFolder}/.vscode/STM32F103xx.svd",
             "preLaunchTask": "Build Complete (PowerShell)",
             "armToolchainPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344\\tools\\bin",
-            "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202401111127\\tools\\bin\\ST-LINK_gdbserver.exe",
+            "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin\\ST-LINK_gdbserver.exe",
             "showDevDebugOutput": "raw",
             "swoConfig": {
                 "enabled": false,
@@ -79,6 +79,10 @@
             "svdFile": "${workspaceFolder}/.vscode/STM32F103xx.svd",
             "preLaunchTask": "Build and Flash Debug",
             "loadFiles": ["${workspaceFolder}/src/FF_OSD.elf"],
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
             "armToolchainPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344\\tools\\bin",
             "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin\\ST-LINK_gdbserver.exe",
             "showDevDebugOutput": "raw",
@@ -111,6 +115,10 @@
             "serialNumber": "",
             "svdFile": "${workspaceFolder}/.vscode/STM32F103xx.svd",
             "preLaunchTask": "Flash Debug STM32 via ST-Link",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
             "armToolchainPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344\\tools\\bin",
             "stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin\\ST-LINK_gdbserver.exe",
             "showDevDebugOutput": "raw",
