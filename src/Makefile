@@ -3,6 +3,7 @@ OBJS += build_info.o
 OBJS += cancellation.o
 OBJS += config.o
 OBJS += console.o
+OBJS += frontpanel.o
 OBJS += i2c.o
 OBJS += main.o
 OBJS += string.o

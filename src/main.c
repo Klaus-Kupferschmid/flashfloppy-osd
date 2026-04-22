@@ -718,11 +718,11 @@ static void emulate_gotek_buttons(void)
     emulate_gotek_button(K_RIGHT, &gr);
     emulate_gotek_button(K_SELECT, &gs);
     if (gl.pressed) b |= B_LEFT;
-    if (!gpio_read_pin(gpioa, 6)) b |= B_LEFT;
+    if (!r2h_display_enabled && !gpio_read_pin(gpioa, 6)) b |= B_LEFT;
     if (gr.pressed) b |= B_RIGHT;
-    if (!gpio_read_pin(gpiob, 0)) b |= B_RIGHT;
+    if (!r2h_display_enabled && !gpio_read_pin(gpiob, 0)) b |= B_RIGHT;
     if (gs.pressed) b |= B_SELECT;
-    if (!gpio_read_pin(gpioa, 2)) b |= B_SELECT;
+    if (!r2h_display_enabled && !gpio_read_pin(gpioa, 2)) b |= B_SELECT;
     *(volatile uint8_t *)&i2c_osd_info.buttons = b;
 }
 
@@ -879,6 +879,7 @@ int main(void)
     time_init();
     console_init();
     i2c_init();
+    frontpanel_init();
 
     /* PC13: Blue Pill Indicator LED (Active Low) */
     gpio_configure_pin(gpioc, 13, GPI_pull_up);
@@ -893,9 +894,8 @@ int main(void)
     /* PB14 = VSYNC input */
     gpio_configure_pin(gpio_vsync, pin_vsync, GPI_pull_up);
 
-    /* PA3,4,5: Used to be Gotek buttons. Hold LOW to force disconnection. */
-    gpio_configure_pin(gpioa, 3, GPO_opendrain(_2MHz, LOW));
-    gpio_configure_pin(gpioa, 4, GPO_opendrain(_2MHz, LOW));
+    /* PA5: Used to be Gotek button. Hold LOW to force disconnection.
+     * PA3 and PA4 are now FrontPanel buttons (configured in frontpanel_init). */
     gpio_configure_pin(gpioa, 5, GPO_opendrain(_2MHz, LOW));
 
     config_init();
@@ -905,16 +905,8 @@ int main(void)
     if (config.polarity == SYNC_HIGH)
         running_polarity = SYNC_HIGH;
 
-    /* Set user pin output modes and initial logic levels. */
-    for (i = 0; i < 3; i++) {
-        bool_t level = (config.user_pin_high >> i) & 1;
-        if (config.user_pin_opendrain & (1u<<i))
-            gpio_configure_pin(gpio_user, pin_u0+i,
-                               GPO_opendrain(_2MHz, level));
-        if (config.user_pin_pushpull & (1u<<i))
-            gpio_configure_pin(gpio_user, pin_u0+i,
-                               GPO_pushpull(_2MHz, level));
-    }
+    /* User pins PB8/PB9/PB10 are now used by FrontPanel
+     * (R2H_UP_U0, R2H_DOWN_U1, I2C2_SCL). Skip user pin config. */
 
     /* Display DMA setup: From memory into the Display Timer's CCRx. */
     if (startup_display_spi == DISP_SPI1)
@@ -1166,6 +1158,8 @@ int main(void)
         }
 
         i2c_process();
+
+        frontpanel_process();
 
         /* Update debug button state continuously (read via Live Watch) */
         debug_btn = 0;

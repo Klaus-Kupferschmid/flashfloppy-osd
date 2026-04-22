@@ -24,6 +24,7 @@
 #include "cancellation.h"
 #include "time.h"
 #include "timer.h"
+#include "frontpanel.h"
 
 /*
  * Local variables:
