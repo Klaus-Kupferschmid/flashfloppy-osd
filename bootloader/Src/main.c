@@ -305,29 +305,20 @@ void Reset_Handler(void)
 			delay(DELAY_100MS);
 		}
 		
-		/* PHASE 3: Set final "waiting" color - Red (different from DF0 blue) */
-		fp_set_leds(LED_RED);
+		/* PHASE 3: Set final "waiting" color - Pink for USB mode */
+		fp_set_leds(LED_PINK);
 		LED1_ON;
 		delay(DELAY_100MS);  /* Let I2C finish completely */
 		
 		/* === USB STARTS HERE - NO MORE I2C UNTIL USB_Shutdown! === */
 		USB_Init();
 		
-		/* Simple software LED blink - NO I2C DURING USB OPERATION! */
-		/* Red LED stays on, PB2 blinks to show activity */
-		
+		/* PB2 blinks while waiting */
 		while (1) {
-			if (UploadStarted) {
-				/* Flash in progress - just keep LED on, no I2C! */
-				LED1_ON;
-			} else {
-				/* Waiting for flash - blink PB2 only */
-				LED1_ON;
-				delay(200000L);
-				LED1_OFF;
-				delay(200000L);
-			}
-			
+			GPIOB->BRR = GPIO_BRR_BR2;   /* ON */
+			delay(100000L);
+			GPIOB->BSRR = GPIO_BSRR_BS2; /* OFF */
+			delay(100000L);
 			if (UploadFinished) break;
 		}
 		

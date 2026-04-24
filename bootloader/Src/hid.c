@@ -280,14 +280,13 @@ static void HIDUSB_HandleData(uint8_t *data)
 			break;
 		}
 	} else if (CurrentPageOffset >= PAGE_SIZE) {
-		LED1_ON;
+		/* LED1 controlled by main.c - don't touch here */
 		page_address = (uint16_t * ) (FLASH_BASE_ADDRESS +
 			(CurrentPage * PAGE_SIZE));
 		FLASH_WritePage(page_address, (uint16_t *) PageData,
 			PAGE_SIZE / 2);
 		CurrentPage++;
 		CurrentPageOffset = 0;
-		LED1_OFF;
 	}
   
   if((CurrentPageOffset == 0)||(CurrentPageOffset == 1024)){
