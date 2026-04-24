@@ -1,0 +1,212 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 bootloader.o
+ .data          0x00000000        0x0 bootloader.o
+ .bss           0x00000000        0x0 bootloader.o
+ .text.Default_Handler
+                0x00000000        0x2 bootloader.o
+ .text          0x00000000        0x0 usb_dfu.o
+ .data          0x00000000        0x0 usb_dfu.o
+ .bss           0x00000000        0x0 usb_dfu.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00002000         xr
+RAM              0x20000000         0x00005000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD bootloader.o
+LOAD usb_dfu.o
+
+.text           0x08000000      0x93c
+                0x08000000                        _stext = .
+ *(.vector_table)
+ .vector_table  0x08000000        0x8 bootloader.o
+                0x08000000                vector_table
+ *(.text)
+ *(.text*)
+ .text.early_delay
+                0x08000008       0x1e bootloader.o
+ *fill*         0x08000026        0x2 
+ .text.debug_blink
+                0x08000028       0x58 bootloader.o
+ .text.Reset_Handler
+                0x08000080      0x2fc bootloader.o
+                0x08000080                Reset_Handler
+ .text.ep0_set_tx_status
+                0x0800037c       0x28 usb_dfu.o
+ .text.ep0_set_rx_status
+                0x080003a4       0x28 usb_dfu.o
+ .text.ep0_send_zlp
+                0x080003cc       0x10 usb_dfu.o
+ .text.ep0_stall
+                0x080003dc       0x14 usb_dfu.o
+ .text.flash_lock
+                0x080003f0       0x10 usb_dfu.o
+ .text.flash_unlock
+                0x08000400       0x1c usb_dfu.o
+ .text.pma_read.constprop.0
+                0x0800041c       0x2c usb_dfu.o
+ .text.ep0_send
+                0x08000448       0x44 usb_dfu.o
+ .text.usb_dfu_init
+                0x0800048c       0x8c usb_dfu.o
+                0x0800048c                usb_dfu_init
+ .text.usb_dfu_poll
+                0x08000518      0x37c usb_dfu.o
+                0x08000518                usb_dfu_poll
+ *(.rodata)
+ *(.rodata*)
+ .rodata.string_descs
+                0x08000894       0x14 usb_dfu.o
+ .rodata.string_desc_4
+                0x080008a8       0x1a usb_dfu.o
+ .rodata.string_desc_3
+                0x080008c2        0xa usb_dfu.o
+ .rodata.string_desc_2
+                0x080008cc       0x20 usb_dfu.o
+ .rodata.string_desc_1
+                0x080008ec       0x1c usb_dfu.o
+ .rodata.string_desc_0
+                0x08000908        0x4 usb_dfu.o
+ .rodata.config_desc
+                0x0800090c       0x1b usb_dfu.o
+ .rodata.device_desc
+                0x08000927       0x12 usb_dfu.o
+                0x0800093c                        . = ALIGN (0x4)
+ *fill*         0x08000939        0x3 
+                0x0800093c                        _etext = .
+
+.glue_7         0x0800093c        0x0
+ .glue_7        0x0800093c        0x0 linker stubs
+
+.glue_7t        0x0800093c        0x0
+ .glue_7t       0x0800093c        0x0 linker stubs
+
+.vfp11_veneer   0x0800093c        0x0
+ .vfp11_veneer  0x0800093c        0x0 linker stubs
+
+.v4_bx          0x0800093c        0x0
+ .v4_bx         0x0800093c        0x0 linker stubs
+
+.iplt           0x0800093c        0x0
+ .iplt          0x0800093c        0x0 bootloader.o
+
+.rel.dyn        0x0800093c        0x0
+ .rel.iplt      0x0800093c        0x0 bootloader.o
+
+.data           0x20000000        0x4 load address 0x0800093c
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sdat = .
+ *(.data)
+ *(.data*)
+ .data.dfu_state
+                0x20000000        0x1 usb_dfu.o
+                0x20000004                        . = ALIGN (0x4)
+ *fill*         0x20000001        0x3 
+                0x20000004                        _edat = .
+                0x0800093c                        _ldat = LOADADDR (.data)
+
+.igot.plt       0x20000004        0x0 load address 0x08000940
+ .igot.plt      0x20000004        0x0 bootloader.o
+
+.bss            0x20000004      0x420 load address 0x08000940
+                0x20000004                        . = ALIGN (0x4)
+                0x20000004                        _sbss = .
+ *(.bss)
+ *(.bss*)
+ .bss.error_count.0
+                0x20000004        0x1 bootloader.o
+ *fill*         0x20000005        0x3 
+ .bss.success_start.1
+                0x20000008        0x4 bootloader.o
+ .bss.phase.2   0x2000000c        0x1 bootloader.o
+ *fill*         0x2000000d        0x3 
+ .bss.last_tick.3
+                0x20000010        0x4 bootloader.o
+ .bss.led_state
+                0x20000014        0x1 bootloader.o
+                0x20000014                led_state
+ *fill*         0x20000015        0x3 
+ .bss.tick_ms   0x20000018        0x4 bootloader.o
+ .bss.dfu_buffer_len
+                0x2000001c        0x2 usb_dfu.o
+ .bss.dfu_buffer
+                0x2000001e      0x400 usb_dfu.o
+ .bss.dfu_block_num
+                0x2000041e        0x2 usb_dfu.o
+ .bss.dfu_status
+                0x20000420        0x1 usb_dfu.o
+ .bss.usb_configured
+                0x20000421        0x1 usb_dfu.o
+ .bss.usb_address
+                0x20000422        0x1 usb_dfu.o
+ *(COMMON)
+                0x20000424                        . = ALIGN (0x4)
+ *fill*         0x20000423        0x1 
+                0x20000424                        _ebss = .
+                0x20005000                        _stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+
+/DISCARD/
+ *(.eh_frame)
+ *(.ARM.exidx*)
+
+.ARM.attributes
+                0x00000000       0x2d
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x2d bootloader.o
+ .ARM.attributes
+                0x0000002d       0x2d usb_dfu.o
+OUTPUT(bootloader.elf elf32-littlearm)
+LOAD linker stubs
+
+.debug_info     0x00000000     0x1133
+ .debug_info    0x00000000      0x5a5 bootloader.o
+ .debug_info    0x000005a5      0xb8e usb_dfu.o
+
+.debug_abbrev   0x00000000      0x5d6
+ .debug_abbrev  0x00000000      0x2ab bootloader.o
+ .debug_abbrev  0x000002ab      0x32b usb_dfu.o
+
+.debug_loclists
+                0x00000000      0xa7f
+ .debug_loclists
+                0x00000000      0x19c bootloader.o
+ .debug_loclists
+                0x0000019c      0x8e3 usb_dfu.o
+
+.debug_aranges  0x00000000       0xa0
+ .debug_aranges
+                0x00000000       0x38 bootloader.o
+ .debug_aranges
+                0x00000038       0x68 usb_dfu.o
+
+.debug_rnglists
+                0x00000000      0x286
+ .debug_rnglists
+                0x00000000      0x10e bootloader.o
+ .debug_rnglists
+                0x0000010e      0x178 usb_dfu.o
+
+.debug_line     0x00000000     0x10a0
+ .debug_line    0x00000000      0x7b6 bootloader.o
+ .debug_line    0x000007b6      0x8ea usb_dfu.o
+
+.debug_str      0x00000000      0x565
+ .debug_str     0x00000000      0x565 bootloader.o
+                                0x34d (size before relaxing)
+ .debug_str     0x00000565      0x4a5 usb_dfu.o
+
+.comment        0x00000000       0x46
+ .comment       0x00000000       0x46 bootloader.o
+                                 0x47 (size before relaxing)
+ .comment       0x00000046       0x47 usb_dfu.o
+
+.debug_frame    0x00000000      0x18c
+ .debug_frame   0x00000000       0x78 bootloader.o
+ .debug_frame   0x00000078      0x114 usb_dfu.o

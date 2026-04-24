@@ -53,8 +53,13 @@ static bool_t kb_btn_debounce;
 #define BOOT_BTN_IDLE      0
 #define BOOT_BTN_PRESSED   1
 #define BOOT_BTN_DEBOUNCE  2
+#define BOOT_BTN_BOOTLOADER 3  /* Waiting for 4s hold to enter bootloader */
 static uint8_t boot_btn_state;
 static uint32_t boot_btn_time;
+static uint32_t boot_btn_ignore_until;  /* Ignore button until this time */
+
+/* HID Bootloader magic word (written to BKP->DR4). */
+#define BOOTLOADER_MAGIC  0x424C
 
 /* R2H display mode (not persisted across power cycles).
  * Exported so main.c can suppress GoTek button reads. */
@@ -237,6 +242,39 @@ static void fp_flash_write(void)
 }
 
 /*
+ * Enter HID bootloader mode.
+ * Writes magic word to backup register and resets.
+ * Called when PA4 is held for 4+ seconds.
+ */
+static void enter_bootloader(void)
+{
+    /* Enable PWR and BKP clocks. */
+    rcc->apb1enr |= RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN;
+
+    /* Enable write access to backup domain. */
+    pwr->cr |= PWR_CR_DBP;
+
+    /* Write magic word to BKP DR4 (index 3 in dr1 array).
+     * Bootloader checks this and enters HID mode if set. */
+    bkp->dr1[3] = BOOTLOADER_MAGIC;
+
+    /* Disable backup domain write access. */
+    pwr->cr &= ~PWR_CR_DBP;
+
+    /* Disable clocks. */
+    rcc->apb1enr &= ~(RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
+
+    /* Turn off LEDs to indicate reset. */
+    fp_i2c2_transmit(ADG715_FP_ADDR, 0);
+
+    /* System reset - bootloader will see magic word. */
+    scb->aircr = SCB_AIRCR_VECTKEY | SCB_AIRCR_SYSRESETREQ;
+
+    /* Never reached. */
+    for (;;);
+}
+
+/*
  * Initialise I2C2 as master on PB10/PB11, 100kHz standard mode.
  * Configure FrontPanel GPIOs.
  */
@@ -296,6 +334,7 @@ void frontpanel_init(void)
     hdmi_btn_debounce = FALSE;
     kb_btn_debounce = FALSE;
     boot_btn_state = BOOT_BTN_IDLE;
+    boot_btn_ignore_until = time_now() + time_ms(4000);  /* Ignore for 4s after start */
     r2h_display_enabled = FALSE;
     r2h_pulse_active = FALSE;
     r2h_sel_btn_debounce = FALSE;
@@ -365,10 +404,16 @@ void frontpanel_process(void)
         }
     }
 
-    /* --- BT_Boot_Select (PA4): short press = cycle DF, long = toggle R2H ---
-     * Non-blocking state machine (original FrontPanel blocks until release). */
+    /* --- BT_Boot_Select (PA4): short = cycle DF, long = R2H, 4s = bootloader ---
+     * Non-blocking state machine (original FrontPanel blocks until release).
+     * Timing: <800ms = short press, 800ms-4s = long press, >4s = bootloader */
     switch (boot_btn_state) {
     case BOOT_BTN_IDLE:
+        /* Ignore button for 4s after startup (prevents re-entering bootloader) */
+        if (time_since(boot_btn_ignore_until) < 0) {
+            /* Still in ignore period */
+            break;
+        }
         if (!gpio_read_pin(gpioa, FP_PIN_BT_BOOT_SELECT)) {
             boot_btn_time = now;
             boot_btn_state = BOOT_BTN_PRESSED;
@@ -376,10 +421,17 @@ void frontpanel_process(void)
         break;
 
     case BOOT_BTN_PRESSED:
-        /* Wait for button release. */
-        if (gpio_read_pin(gpioa, FP_PIN_BT_BOOT_SELECT)) {
+        /* Check for 4-second hold (bootloader trigger) while still pressed. */
+        if (!gpio_read_pin(gpioa, FP_PIN_BT_BOOT_SELECT)) {
+            if (time_diff(boot_btn_time, now) > time_ms(4000)) {
+                /* 4+ seconds: enter HID bootloader mode. */
+                enter_bootloader();
+                /* Never returns. */
+            }
+        } else {
+            /* Button released - check hold duration. */
             if (time_diff(boot_btn_time, now) > time_ms(800)) {
-                /* Long press: toggle R2H display mode. */
+                /* Long press (800ms-4s): toggle R2H display mode. */
                 if (!r2h_display_enabled) {
                     r2h_display_enabled = TRUE;
                     fp_sw_pattern |= LED_R2H_DISPLAY_ENABLE;

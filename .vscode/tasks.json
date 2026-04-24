@@ -209,6 +209,20 @@
                 "Build Debug (Make)",
                 "Flash Debug STM32 via ST-Link"
             ]
+        },
+        {
+            "label": "USB Flash (Bootloader)",
+            "type": "shell",
+            "command": ".\\bootloader\\tools\\hid_flash\\hid-flash.exe",
+            "args": ["src\\FF_OSD_hid4k.bin", "COM99"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "problemMatcher": []
         }
     ]
 }

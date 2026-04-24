@@ -12,10 +12,19 @@ ifneq ($(RULES_MK),y)
 
 export ROOT := $(CURDIR)
 
+PROJ_HID4K = FF_OSD_hid4k
+
 all:
 	$(MAKE) -C src -f $(ROOT)/Rules.mk $(PROJ).elf $(PROJ).bin $(PROJ).hex
 debug:
 	debug=y $(MAKE) -C src -f $(ROOT)/Rules.mk $(PROJ).elf $(PROJ).bin $(PROJ).hex
+
+# Build for HID Bootloader (4KB at 0x08000000, app at 0x08001000)
+hid4k:
+	$(MAKE) -C src -f $(ROOT)/Rules.mk $(PROJ_HID4K).elf $(PROJ_HID4K).bin $(PROJ_HID4K).hex
+hid4k-debug:
+	$(MAKE) -C src -f $(ROOT)/Rules.mk $(PROJ_HID4K).elf $(PROJ_HID4K).bin $(PROJ_HID4K).hex debug=y
+
 clean:
 	rm -rf $(PROJ)-$(VER)*
 	$(MAKE) -f $(ROOT)/Rules.mk $@

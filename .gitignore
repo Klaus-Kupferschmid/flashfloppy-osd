@@ -9,12 +9,15 @@
 *.rej
 *.swp
 /FF_OSD*
+chat-verlauf*.txt
 
 # CMake build artifacts
 build_*/
+build/
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
+bootloader/build/
 
 # Additional VS Code files (optional)
 # .vscode/settings.json
