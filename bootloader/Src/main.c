@@ -305,15 +305,15 @@ void Reset_Handler(void)
 			delay(DELAY_100MS);
 		}
 		
-		/* PHASE 3: Set final "waiting" color - Pink for USB mode */
+		/* PHASE 3: Set Pink LED for USB wait state */
 		fp_set_leds(LED_PINK);
 		LED1_ON;
-		delay(DELAY_100MS);  /* Let I2C finish completely */
+		delay(DELAY_100MS);  /* Let I2C finish */
 		
-		/* === USB STARTS HERE - NO MORE I2C UNTIL USB_Shutdown! === */
+		/* Start USB */
 		USB_Init();
 		
-		/* PB2 blinks while waiting */
+		/* Wait for flash to complete - PB2 blinks (fast = appears constant) */
 		while (1) {
 			GPIOB->BRR = GPIO_BRR_BR2;   /* ON */
 			delay(100000L);
