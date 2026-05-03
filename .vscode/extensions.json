@@ -7,6 +7,8 @@
         "dan-c-underwood.arm",
         "zixuanwang.linkerscript",
         "ms-vscode.hexeditor",
-        "webfreak.debug"
+        "webfreak.debug",
+        "github.copilot",
+        "github.copilot-chat"
     ]
 }

@@ -16,5 +16,12 @@
     "cortex-debug.stlinkPath": "C:\\Program Files\\ST\\STM32CubeIDE_1.18.1\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.2.100.202501151542\\tools\\bin",
     "cortex-debug.JLinkGDBServerPath": "",
     "cortex-debug.openocdPath": "",
-    "terminal.integrated.defaultProfile.windows": "PowerShell"
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "github.copilot.enable": {
+        "*": true,
+        "c": true,
+        "cpp": true,
+        "markdown": true
+    },
+    "github.copilot.chat.defaultModel": "gpt-4.5"
 }
